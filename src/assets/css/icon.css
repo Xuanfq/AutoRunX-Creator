@@ -1,0 +1,44 @@
+@font-face {
+    font-family: "element-icons"; /* Project id 3878158 */
+    src: url('//at.alicdn.com/t/c/font_3878158_5agpr0ng21d.eot?t=1675346748975'); /* IE9 */
+    src: url('//at.alicdn.com/t/c/font_3878158_5agpr0ng21d.eot?t=1675346748975#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('//at.alicdn.com/t/c/font_3878158_5agpr0ng21d.woff2?t=1675346748975') format('woff2'),
+         url('//at.alicdn.com/t/c/font_3878158_5agpr0ng21d.ttf?t=1675346748975') format('truetype'),
+         url('//at.alicdn.com/t/c/font_3878158_5agpr0ng21d.svg?t=1675346748975#element-icons') format('svg');
+  }
+  
+  .element-icons {
+    font-family: "element-icons" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .el-iconvertical-top-align:before {
+    content: "\e6fb";
+  }
+  
+  .el-iconhorizontal-align-center:before {
+    content: "\e706";
+  }
+  
+  .el-iconhorizontal-align-right:before {
+    content: "\e707";
+  }
+  
+  .el-iconhorizontal-align-left:before {
+    content: "\e708";
+  }
+  
+  .el-iconvertical-align-bottom:before {
+    content: "\e710";
+  }
+  
+  .el-iconvertical-align-top:before {
+    content: "\e711";
+  }
+  
+  .el-iconvertical-align-center:before {
+    content: "\e712";
+  }
