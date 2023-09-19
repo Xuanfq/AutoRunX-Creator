@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/icon/iconfont.css"
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 import './plugins/element.js'
+import './registerServiceWorker'
 
 Vue.use(ElementUI, {locale})
 
