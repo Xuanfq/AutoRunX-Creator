@@ -7,11 +7,14 @@ import "./assets/icon/iconfont.css"
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 import './plugins/element.js'
 import './registerServiceWorker'
+import axios from 'axios'
 
 Vue.use(ElementUI, {locale})
 
 
 Vue.config.productionTip = false
+
+Vue.prototype.$axios = axios
 
 new Vue({
   router,

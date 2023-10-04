@@ -21,12 +21,12 @@ Vue.use(Router)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
   }
  */
-import PaperDesign from '../views/editor/index.vue'
+import editor from '../views/editor/index.vue'
 
 const routes = [{
     name: 'index',
     path: '/',
-    component: PaperDesign,
+    component: editor,
 },
 // {
 //     name: 'login',
@@ -36,7 +36,7 @@ const routes = [{
 {
     name: 'editor',
     path: '/editor',
-    component: PaperDesign,
+    component: editor,
 }]
 
 const router = new Router({
