@@ -27,20 +27,30 @@ const routes = [{
     name: 'index',
     path: '/',
     component: editor,
-},
-// {
-//     name: 'login',
-//     path: '/login',
-//     component: Login,
-// },
-{
+    meta: {
+        title: 'AutoRunX Editor',
+        keepAlive: true, // 需要被缓存
+    }
+}, {
     name: 'editor',
     path: '/editor',
     component: editor,
+    meta: {
+        title: 'AutoRunX Editor',
+        keepAlive: true, // 需要被缓存
+    }
+}, {
+    name: 'creator',
+    path: '/creator',
+    component: editor,
+    meta: {
+        title: 'AutoRunX Editor',
+        keepAlive: true, // 需要被缓存
+    }
 }]
 
 const router = new Router({
-    mode:"hash",
+    mode: "hash",
     routes, // `routes: routes` 的缩写
 })
 

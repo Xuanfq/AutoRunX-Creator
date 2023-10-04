@@ -9,12 +9,17 @@ import './plugins/element.js'
 import './registerServiceWorker'
 import axios from 'axios'
 
-Vue.use(ElementUI, {locale})
+Vue.use(ElementUI, { locale })
 
 
 Vue.config.productionTip = false
 
 Vue.prototype.$axios = axios
+
+router.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title == undefined ? 'AutoRunX' : to.meta.title
+  next();
+})
 
 new Vue({
   router,
