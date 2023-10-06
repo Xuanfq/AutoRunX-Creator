@@ -1831,10 +1831,18 @@ export default {
 	},
 	created() {
 		// 加载配置
-		this.$axios.get('https://raw.githubusercontent.com/Xuanfq/AutoRunX-Python/master/cli/doc/nodeData.json')
+		this.$axios.get('https://raw.githubusercontent.com/Xuanfq/AutoRunX-Python/09bb6eb9c7d145dc04d4218efab6fbe850138c31/cli/doc/nodeData.json')
 			.then((res)=>{
 				// console.log(res)
-				this.searchNodeData=res.data
+				let data=JSON.parse(JSON.stringify(res.data))
+				for(let i=0;i<data.length;i++){
+					if(data[i].type=='ctrl'){
+						data[i].nodeList=data[i].nodeList.filter((item)=>{
+							return item.node_name!='ctrl-start' && item.node_name!='ctrl-end'
+						})
+					}
+				}
+				this.searchNodeData=data
 			})
 			.catch((err)=>{
 				this.$message({
