@@ -48,8 +48,8 @@ const fittingString = (str, maxWidth, fontSize) => {
 };
 
 const NODE_TYPE_IMAGE_MAP = {
-	start: node_type_flow_img,
-	end: node_type_flow_img,
+	evtx: node_type_flow_img,
+	evrx: node_type_flow_img,
 	ctrl: node_type_flow_img,
 	func: node_type_flow_img,
 	dtio: node_type_data_img,
@@ -57,12 +57,12 @@ const NODE_TYPE_IMAGE_MAP = {
 };
 
 const NODE_TYPE_COLOR_MAP = {
-	start: 'green',
-	end: 'red',
+	evtx: 'red',
+	evrx: 'green',
 	ctrl: 'orange',
 	func: 'RoyalBlue',
 	dtio: 'DarkCyan',
-	dtpc: 'purple'
+	dtpc: 'Orchid'
 };
 
 const VALUE_TYPE_COLOR_MAP = {
@@ -75,12 +75,14 @@ const VALUE_TYPE_COLOR_MAP = {
 }
 
 const FUNC_GET_EDGE_ANCHORPOINT_INDEX = (cfg, anchorPointShapeName) => {
+	let isEvrx = FUNC_GET_IS_EVRX_NODE(cfg.node_type)
+	let isEvtx = FUNC_GET_IS_EVTX_NODE(cfg.node_type)
 	let isFunc = FUNC_GET_IS_FUNC_NODE(cfg.node_type)
 	let isCtrl = FUNC_GET_IS_CTRL_NODE(cfg.node_type)
 	let index = 0
 
 	// 输入
-	if (isCtrl || isFunc) {
+	if (isCtrl || isFunc || isEvtx) {
 		if (anchorPointShapeName.startsWith("pre_edge_id")) {
 			return index
 		}
@@ -94,7 +96,7 @@ const FUNC_GET_EDGE_ANCHORPOINT_INDEX = (cfg, anchorPointShapeName) => {
 	}
 
 	// 输出
-	if (isFunc) {
+	if (isFunc || isEvrx) {
 		if (anchorPointShapeName.startsWith("nxt_edge_id")) {
 			return index
 		}
@@ -118,12 +120,14 @@ const FUNC_GET_EDGE_ANCHORPOINT_INDEX = (cfg, anchorPointShapeName) => {
 }
 
 const FUNC_GET_EDGE_ANCHORPOINT_INDEX_FROM_ID = (cfg, id) => {
+	let isEvrx = FUNC_GET_IS_EVRX_NODE(cfg.node_type)
+	let isEvtx = FUNC_GET_IS_EVTX_NODE(cfg.node_type)
 	let isFunc = FUNC_GET_IS_FUNC_NODE(cfg.node_type)
 	let isCtrl = FUNC_GET_IS_CTRL_NODE(cfg.node_type)
 	let index = 0
 
 	// 输入
-	if (isCtrl || isFunc) {
+	if (isCtrl || isFunc || isEvtx) {
 		if (id == null || id == undefined || id == "pre_edge_id") {
 			return index
 		}
@@ -137,7 +141,7 @@ const FUNC_GET_EDGE_ANCHORPOINT_INDEX_FROM_ID = (cfg, id) => {
 	}
 
 	// 输出
-	if (isFunc) {
+	if (isFunc || isEvrx) {
 		if (id == 0) {
 			return index
 		}
@@ -161,12 +165,14 @@ const FUNC_GET_EDGE_ANCHORPOINT_INDEX_FROM_ID = (cfg, id) => {
 }
 
 const FUNC_GET_EDGE_ANCHORPOINT_INDEX_ID = (cfg, anchorPointIndex) => {
+	let isEvrx = FUNC_GET_IS_EVRX_NODE(cfg.node_type)
+	let isEvtx = FUNC_GET_IS_EVTX_NODE(cfg.node_type)
 	let isFunc = FUNC_GET_IS_FUNC_NODE(cfg.node_type)
 	let isCtrl = FUNC_GET_IS_CTRL_NODE(cfg.node_type)
 	let index = 0
 
 	// 输入
-	if (isCtrl || isFunc) {
+	if (isCtrl || isFunc || isEvtx) {
 		if (anchorPointIndex == index) {
 			return "pre_edge_id"
 		}
@@ -180,7 +186,7 @@ const FUNC_GET_EDGE_ANCHORPOINT_INDEX_ID = (cfg, anchorPointIndex) => {
 	}
 
 	// 输出
-	if (isFunc) {
+	if (isFunc || isEvrx) {
 		if (anchorPointIndex == index) {
 			return 0
 		}
@@ -205,8 +211,8 @@ const FUNC_GET_EDGE_ANCHORPOINT_INDEX_ID = (cfg, anchorPointIndex) => {
 
 const FUNC_GET_IS_FLOW_NODE = (nodeType) => {
 	if (
-		nodeType === "start" ||
-		nodeType === "end" ||
+		nodeType === "evtx" ||
+		nodeType === "evrx" ||
 		nodeType === "ctrl" ||
 		nodeType === "func"
 	) {
@@ -215,10 +221,26 @@ const FUNC_GET_IS_FLOW_NODE = (nodeType) => {
 	return false;
 }
 
+const FUNC_GET_IS_EVTX_NODE = (nodeType) => {
+	if (
+		nodeType === "evtx"
+	) {
+		return true;
+	}
+	return false;
+}
+
+const FUNC_GET_IS_EVRX_NODE = (nodeType) => {
+	if (
+		nodeType === "evrx"
+	) {
+		return true;
+	}
+	return false;
+}
+
 const FUNC_GET_IS_CTRL_NODE = (nodeType) => {
 	if (
-		nodeType === "start" ||
-		nodeType === "end" ||
 		nodeType === "ctrl"
 	) {
 		return true;
@@ -296,7 +318,7 @@ G6.registerBehavior('custom-operate', {
 			} else if (anchorPointClass === "output") {
 				anchorPointType = model.output_type[shapeName.split("-")[1]]
 			}
-			// console.log(anchorPointClass, anchorPointType, FUNC_GET_EDGE_ANCHORPOINT_INDEX(model, shapeName))
+			console.log(anchorPointClass, anchorPointType, FUNC_GET_EDGE_ANCHORPOINT_INDEX(model, shapeName))
 			let anchorPointIndex = FUNC_GET_EDGE_ANCHORPOINT_INDEX(model, shapeName)
 			let addNewEdge = false
 			if (anchorPointClass === 'output' || anchorPointClass === 'nxt_edge_id' || anchorPointClass === 'pre_edge_id') {
@@ -571,15 +593,7 @@ G6.registerBehavior('custom-operate', {
 			const nodes = this.graph.findAllByState('node', 'selected');
 			nodes.forEach((node) => {
 				// console.log(node.getModel().id)
-				let id = node.getModel().id
-				if (id != "node-start" && id != "node-end") {
-					this.graph.removeItem(node)
-				} else {
-					Event.emit("rqShowMessage", {
-						message: '禁止删除',
-						type: 'error'
-					})
-				}
+				this.graph.removeItem(node)
 			})
 			const edges = this.graph.findAllByState('edge', 'selected');
 			edges.forEach((edge) => {
@@ -723,6 +737,8 @@ G6.registerNode("flow-node", {
 		const CONTENT_ITEM_ACTUAL_HEIGHT =
 			CONTENT_ITEM_HEIGHT - CONTENT_ITEM_PADDING_Y * 2;
 
+		let isEvtx = FUNC_GET_IS_EVTX_NODE(cfg.node_type)
+		let isEvrx = FUNC_GET_IS_EVRX_NODE(cfg.node_type)
 		let isFlow = FUNC_GET_IS_FLOW_NODE(cfg.node_type)
 		let isFunc = FUNC_GET_IS_FUNC_NODE(cfg.node_type)
 		let isCtrl = FUNC_GET_IS_CTRL_NODE(cfg.node_type)
@@ -816,11 +832,20 @@ G6.registerNode("flow-node", {
 
 		// 输入
 		let inList = [];
-		if (isFlow) {
+		let inNamePrefixList = [];
+		let inIntro = []
+		let inTypeIsFlow = []
+		if (isCtrl || isFunc || isEvtx) {
 			inList.push("pre_edge_id");
+			inNamePrefixList.push("pre_edge_id")
+			inIntro.push("执行")
+			inTypeIsFlow.push(true)
 		}
 		for (let key in cfg.input) {
 			inList.push(key);
+			inNamePrefixList.push("input-" + key)
+			inIntro.push(cfg.input_intro[key])
+			inTypeIsFlow.push(cfg.input_type[key].endsWith("edge_id") ? true : false)
 		}
 
 		for (let i = 0; i < inList.length; i++) {
@@ -829,19 +854,13 @@ G6.registerNode("flow-node", {
 
 			const contentItemGroup = group.addGroup();
 
-			let input_intro = "";
-			if (isFlow && i === 0) {
-				input_intro = "执行";
-			} else {
-				input_intro = cfg.input_intro[inList[i]];
-			}
-
-			let namePrefix = `${isFlow && i === 0 ? '' : 'input-'}${inList[i]}`;
+			let input_intro = inIntro[i]
+			let namePrefix = inNamePrefixList[i]
 
 			let linkimage = data_link_img,
 				linkedimage = data_linked_img,
 				linkbgimage = data_linkbg_img;
-			if ((isFlow && i === 0) || cfg.input_type[inList[i]].endsWith("edge_id")) {
+			if (inTypeIsFlow[i]) {
 				linkimage = flow_link_img;
 				linkedimage = flow_linked_img;
 				linkbgimage = flow_linkbg_img;
@@ -906,15 +925,27 @@ G6.registerNode("flow-node", {
 		appendContentItemStartX = KEYSHAPE_WIDTH - KEYSHAPE_LINEWIDTH - CONTENT_PADDING_X;
 
 		let outList = [];
-		if (isFunc) {
+		let outNamePrefix = []
+		let outIntro = []
+		let outTypeIsFlow = []
+		if (isFunc || isEvrx) {
 			outList.push("nxt_edge_id");
+			outNamePrefix.push("nxt_edge_id")
+			outIntro.push("下一步: 执行")
+			outTypeIsFlow.push(true)
 		} else if (isCtrl) {
 			cfg.nxt_edge_id.forEach((edge_id, i) => {
 				outList.push("nxt_edge_id-" + i + "i");
+				outNamePrefix.push("nxt_edge_id-" + i + "i")
+				outIntro.push(cfg.nxt_edge_id_intro[i])
+				outTypeIsFlow.push(true)
 			})
 		}
 		for (let key in cfg.output) {
 			outList.push(key);
+			outNamePrefix.push("output-" + key)
+			outIntro.push(cfg.output_intro[key])
+			outTypeIsFlow.push(cfg.output_type[key].endsWith("edge_id") ? true : false)
 		}
 
 		for (let i = 0; i < outList.length; i++) {
@@ -923,22 +954,13 @@ G6.registerNode("flow-node", {
 
 			const contentItemGroup = group.addGroup();
 
-			let output_intro;
-			if (isFunc && i === 0) {
-				output_intro = "下一步: 执行";
-			} else if (isCtrl && i < cfg.nxt_edge_id.length) {
-				output_intro = cfg.nxt_edge_id_intro[i];
-			} else {
-				output_intro = cfg.output_intro[outList[i]];
-			}
-
-			let namePrefix = `${(isFunc && i === 0) || (isCtrl && i < cfg.nxt_edge_id.length) ? '' : 'output-'}${outList[i]}`;
-			// console.log(namePrefix)
+			let output_intro = outIntro[i]
+			let namePrefix = outNamePrefix[i]
 
 			let linkimage = data_link_img,
 				linkedimage = data_linked_img,
 				linkbgimage = data_linkbg_img;
-			if ((isFunc && i === 0) || (isCtrl && i < cfg.nxt_edge_id.length) || cfg.output_type[outList[i]].endsWith("edge_id")) {
+			if (outTypeIsFlow[i]) {
 				linkimage = flow_link_img;
 				linkedimage = flow_linked_img;
 				linkbgimage = flow_linkbg_img;
@@ -1025,7 +1047,8 @@ G6.registerNode("flow-node", {
 		const CONTENT_ITEM_ACTUAL_HEIGHT =
 			CONTENT_ITEM_HEIGHT - CONTENT_ITEM_PADDING_Y * 2;
 
-		let isFlow = FUNC_GET_IS_FLOW_NODE(cfg.node_type)
+		let isEvtx = FUNC_GET_IS_EVTX_NODE(cfg.node_type)
+		let isEvrx = FUNC_GET_IS_EVRX_NODE(cfg.node_type)
 		let isFunc = FUNC_GET_IS_FUNC_NODE(cfg.node_type)
 		let isCtrl = FUNC_GET_IS_CTRL_NODE(cfg.node_type)
 
@@ -1036,7 +1059,7 @@ G6.registerNode("flow-node", {
 
 		// 输入
 		let inList = [];
-		if (isFlow) {
+		if (isFunc || isCtrl || isEvtx) {
 			inList.push("pre_edge_id");
 		}
 		for (let key in cfg.input) {
@@ -1059,7 +1082,7 @@ G6.registerNode("flow-node", {
 		appendContentItemStartX = KEYSHAPE_WIDTH + KEYSHAPE_LINEWIDTH - CONTENT_PADDING_X;
 
 		let outList = [];
-		if (isFunc) {
+		if (isFunc || isEvrx) {
 			outList.push("nxt_edge_id");
 		} else if (isCtrl) {
 			cfg.nxt_edge_id.forEach((edge_id, i) => {
@@ -1082,6 +1105,7 @@ G6.registerNode("flow-node", {
 			appendContentItemStartY += CONTENT_ITEM_HEIGHT;
 		}
 
+
 		KEYSHAPE_HEIGHT = appendContentItemStartY + CONTENT_PADDING_Y - KEYSHAPE_LINEWIDTH
 
 		tmp_anchorPoints.forEach((value) => {
@@ -1103,40 +1127,8 @@ var graph;
 export const initGraph = (graphElementId, graphWidth, graphHeight, minimapElementId, data) => {
 	if (!data) {
 		data = {
-			nodes: [{
-				"id": "node-start",
-				"name": "开始",
-				"node_name": "ctrl-start",
-				"node_type": "start",
-				"pre_edge_id": [],
-				"nxt_edge_id": [""],
-				"nxt_edge_id_intro": ["下一步: 执行"],
-				"input": {
-				},
-				"input_type": {
-				},
-				"output": {
-				},
-				"output_type": {
-				}
-			}, {
-				"id": "node-end",
-				"name": "结束",
-				"node_name": "ctrl-end",
-				"node_type": "end",
-				"pre_edge_id": [],
-				"nxt_edge_id": [],
-				"input": {
-				},
-				"input_type": {
-				},
-				"output": {
-				},
-				"output_type": {
-				}
-			}],
-			edges: [
-			]
+			nodes: [],
+			edges: []
 		}
 	}
 
@@ -1191,6 +1183,24 @@ export const initGraph = (graphElementId, graphWidth, graphHeight, minimapElemen
 	graph.render();
 
 	Event.on("addNode", this, (data) => {
+		if (data.node_type == 'evrx' || data.node_type == 'evtx') {
+			// only one same event node
+			const findNode = graph.find('node', (node) => {
+				return node.get('model').node_name === data.node_name;
+			});
+			if (findNode) {
+				// stop add node and focus node
+				graph.focusItem(findNode, true, {
+					easing: 'easeCubic',
+					duration: 400,
+				});
+				Event.emit("rqShowMessage", {
+					message: '该节点禁止创建多次',
+					type: 'error'
+				})
+				return
+			}
+		}
 		data.x = GRAPH_STATUS.rqAddNode.x
 		data.y = GRAPH_STATUS.rqAddNode.y
 		graph.addItem("node", data)
@@ -1291,7 +1301,7 @@ export const loadConfig = (config) => {
 			let sourceNodeAnchor = FUNC_GET_EDGE_ANCHORPOINT_INDEX_FROM_ID(nodeMap[sourceNodeId], sourceId)
 			let targetNodeId = targetId.split(".input.")[0]
 			let targetNodeAnchor = FUNC_GET_EDGE_ANCHORPOINT_INDEX_FROM_ID(nodeMap[targetNodeId], targetId)
-			console.log(VALUE_TYPE_COLOR_MAP[nodeMap[sourceNodeId].output_type[sourceNodeField]] || VALUE_TYPE_COLOR_MAP.default)
+			// console.log(VALUE_TYPE_COLOR_MAP[nodeMap[sourceNodeId].output_type[sourceNodeField]] || VALUE_TYPE_COLOR_MAP.default)
 			data.edges.push({
 				id: edge.id,
 				source: sourceNodeId,
