@@ -6,6 +6,7 @@ import flow_linkbg_img from "/src/assets/editor/img/lightgrey-right-triangle-fil
 import data_link_img from "/src/assets/editor/img/grey-circle.png";
 import data_linked_img from "/src/assets/editor/img/grey-circle-fill.png";
 import data_linkbg_img from "/src/assets/editor/img/lightgrey-circle-fill.png";
+import node_type_event_img from "/src/assets/editor/img/green-event-fill.png";
 import node_type_flow_img from "/src/assets/editor/img/blue-flow-fill.png";
 import node_type_data_img from "/src/assets/editor/img/orange-bigdata-fill.png";
 
@@ -48,8 +49,8 @@ const fittingString = (str, maxWidth, fontSize) => {
 };
 
 const NODE_TYPE_IMAGE_MAP = {
-	evtx: node_type_flow_img,
-	evrx: node_type_flow_img,
+	evtx: node_type_event_img,
+	evrx: node_type_event_img,
 	ctrl: node_type_flow_img,
 	func: node_type_flow_img,
 	dtio: node_type_data_img,
