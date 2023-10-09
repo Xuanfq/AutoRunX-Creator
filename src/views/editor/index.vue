@@ -209,7 +209,6 @@
 
 import Event from "./../../utils/event.js"
 import * as FileUtils from "./../../utils/file.js"
-import * as ObjectUtils from "./../../utils/object.js"
 import * as PFGraph from "./ProgramFlowGraph.js"
 
 export default {
@@ -520,8 +519,7 @@ export default {
 				// 加载配置文件有一定的失色
 				FileUtils.uploadFile('.json', (data) => {
 					const config = JSON.parse(data)
-					// console.log("loaded", loadedConfig)
-					const loadedConfig = PFGraph.loadConfig(config)
+					PFGraph.loadConfig(config)
 					this.$message({
 						message: '加载成功',
 						type: 'success'
@@ -538,15 +536,7 @@ export default {
 			} else if (command === "cmdOpenProject") {
 				FileUtils.uploadFile('.arxc', (data) => {
 					const config = JSON.parse(data)
-					// console.log("loaded", loadedConfig)
-					const saved = PFGraph.saveConfig(null, config.source.graph)
-					if (ObjectUtils.isSame(saved.graph, config.graph)) {
-						// 配置无改动，加载原图不失色
-						PFGraph.loadConfigGraph(config)
-					} else {
-						// 配置有改动
-						PFGraph.loadConfig(config)
-					}
+					PFGraph.loadConfig(config)
 					this.$message({
 						message: '加载成功',
 						type: 'success'

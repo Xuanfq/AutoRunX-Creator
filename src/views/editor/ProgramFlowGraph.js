@@ -48,6 +48,67 @@ const fittingString = (str, maxWidth, fontSize) => {
 	return str;
 };
 
+const isObjectDiff = (json1, json2) => {
+	const getType = (obj) => {
+		return Object.prototype.toString.call(obj).match(/^\[object ([a-zA-Z]*)\]$/)[1];
+	}
+	const isEmptyObject = (obj) => {
+		for (var key in obj) {
+			return false;
+		};
+		return true;
+	}
+
+	if (!json1 && !json2) {
+		return false;
+	} else if (!isEmptyObject(json1) && isEmptyObject(json2)) {
+		return true
+	} else if (!isEmptyObject(json2) && isEmptyObject(json1)) {
+		return true
+	}
+	for (let k in json2) {
+		// 判断是否存在该字段
+		if (json1[k] == undefined) {
+			return true
+		}
+		// 判断数据类型是否一致
+		if (getType(json2[k]) == getType(json1[k])) {
+			// 比较 “Array”和“Object”类型
+			if (getType(json2[k]) == 'Array' || getType(json2[k]) == 'Object') {
+				let result = isObjectDiff(json1[k], json2[k]);
+				if (result) {
+					return true
+				}
+			} else if (json1[k] != json2[k]) { // 比较其他类型数据
+				return true
+			}
+		} else {
+			return true
+		}
+	}
+	for (let k in json1) {
+		// 判断是否存在该字段
+		if (json2[k] == undefined) {
+			return true
+		}
+		// 判断数据类型是否一致
+		if (getType(json2[k]) == getType(json1[k])) {
+			// 比较 “Array”和“Object”类型
+			if (getType(json1[k]) == 'Array' || getType(json1[k]) == 'Object') {
+				let result = isObjectDiff(json2[k], json1[k]);
+				if (result) {
+					return true
+				}
+			} else if (json1[k] != json2[k]) { // 比较其他类型数据
+				return true
+			}
+		} else {
+			return true
+		}
+	}
+	return false;
+}
+
 const NODE_TYPE_IMAGE_MAP = {
 	evtx: node_type_event_img,
 	evrx: node_type_event_img,
@@ -1196,7 +1257,7 @@ export const initGraph = (graphElementId, graphWidth, graphHeight, minimapElemen
 					duration: 400,
 				});
 				Event.emit("rqShowMessage", {
-					message: '该节点禁止创建多次',
+					message: '已创建该节点，该节点禁止创建多次',
 					type: 'error'
 				})
 				return
@@ -1270,16 +1331,16 @@ export const saveConfig = (_graph, _dataSource) => {
 	return config
 }
 
-export const loadConfigGraph = (config) => {
-	config = JSON.parse(JSON.stringify(config))
-	let data = JSON.parse(JSON.stringify(config.source.graph))
-	graph.read(data)
-	// console.log(data)
-	return data
-}
-
 export const loadConfig = (config) => {
 	config = JSON.parse(JSON.stringify(config))
+
+	if(!isObjectDiff(saveConfig(null, config.source.graph).graph,config.graph)){
+		// 配置无改动，加载原图
+		let data=config.source.graph
+		graph.read(data)
+		return data
+	}
+	// 配置改动，加载配置
 	let data = {
 		nodes: [],
 		edges: [],
