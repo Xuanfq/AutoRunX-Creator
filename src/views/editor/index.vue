@@ -8,36 +8,36 @@
 					<div class="header-item">
 						<el-dropdown @command="fileOperate">
 							<span class="el-dropdown-link">
-								文件
+								{{ $t('File') }}
 							</span>
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item command="cmdOpenProject">
 									<div class="header-dropdown-item">
-										<div>打开</div>
+										<div>{{ $t('OpenProject') }}</div>
 										<div></div>
 									</div>
 								</el-dropdown-item>
 								<el-dropdown-item command="cmdSaveProject">
 									<div class="header-dropdown-item">
-										<div>保存</div>
+										<div>{{ $t('SaveProject') }}</div>
 										<div></div>
 									</div>
 								</el-dropdown-item>
 								<el-dropdown-item command="cmdLoadConfig">
 									<div class="header-dropdown-item">
-										<div>加载配置</div>
+										<div>{{ $t('LoadConfiguration') }}</div>
 										<div></div>
 									</div>
 								</el-dropdown-item>
 								<el-dropdown-item command="cmdExportConfig">
 									<div class="header-dropdown-item">
-										<div>导出配置</div>
+										<div>{{ $t('ExportConfiguration') }}</div>
 										<div></div>
 									</div>
 								</el-dropdown-item>
 								<el-dropdown-item command="cmdExportImage">
 									<div class="header-dropdown-item">
-										<div>导出图片</div>
+										<div>{{ $t('ExportPicture') }}</div>
 										<div></div>
 									</div>
 								</el-dropdown-item>
@@ -49,7 +49,26 @@
 					<span style="font-weight: bold;font-size: x-large;">AutoRunX</span>
 				</el-col>
 				<el-col :span="8" class="header-right">
-					<el-avatar icon="el-icon-user-solid" size="medium"></el-avatar>
+					<div class="header-item">
+						<el-dropdown @command="changeLang">
+							<span class="el-dropdown-link">
+								{{ $i18n.locale }}
+							</span>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item v-for="(item, index) in $i18n.messages" :key="index" :command="index">
+									<div class="header-dropdown-item">
+										<div>{{ index }}</div>
+										<div></div>
+									</div>
+								</el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+					</div>
+					<div>
+						<a href="https://github.com/Xuanfq/AutoRunX-Creator" target="_blank">
+							<i class="el-icon-github" style="font-size: 32px;"></i>
+						</a>
+					</div>
 				</el-col>
 			</el-row>
 		</div>
@@ -58,7 +77,7 @@
 			<div class="toolbar-left"> </div>
 			<div class="toolbar-center">
 				<div v-if="false" class="toolbar-container" style="left: 0px; right: initial;">
-					<el-tooltip effect="dark" content="设计器" placement="bottom">
+					<el-tooltip effect="dark" :content="$t('Designer')" placement="bottom">
 						<div class="tool-button" @click="triggerChangeIsLeftOn" :class="isLeftOn ? 'button-on' : ''">
 							<i class="el-icon-theme"></i>
 						</div>
@@ -67,18 +86,18 @@
 				</div>
 			</div>
 			<div class="toolbar-right">
-				<el-tooltip effect="dark" content="折叠" placement="bottom">
+				<el-tooltip effect="dark" :content="$t('Fold')" placement="bottom">
 					<div class="tool-button" @click="triggerChangeIsHeaderFold">
 						<i :class="'el-icon-arrow-' + (isTopFold ? 'down' : 'up')"></i>
 					</div>
 				</el-tooltip>
-				<el-tooltip effect="dark" content="中心" placement="bottom">
+				<el-tooltip effect="dark" :content="$t('Center')" placement="bottom">
 					<div class="tool-button" @click="triggerScrollToCenter">
 						<i class="el-icon-aim"></i>
 					</div>
 				</el-tooltip>
 				<el-divider v-if="false" direction="vertical"></el-divider>
-				<el-tooltip v-if="false" effect="dark" content="属性栏" placement="bottom">
+				<el-tooltip v-if="false" effect="dark" :content="$t('PropertyBar')" placement="bottom">
 					<div class="tool-button" @click="triggerChangeIsRightOn" :class="isRightOn ? 'button-on' : ''">
 						<i class="el-icon-s-operation"></i>
 					</div>
@@ -102,19 +121,19 @@
 			<!-- 底部 -->
 			<div id="footer" :style="'right:' + (isRightOn ? 310 : 0) + 'px;'">
 				<div class="footer-left">
-					<el-tooltip effect="dark" content="选中数量/已画数量" placement="bottom">
+					<el-tooltip effect="dark" :content="$t('SelectQuantity/NumberDrawn')" placement="bottom">
 						<div class="footer-item">
 
 						</div>
 					</el-tooltip>
 				</div>
 				<div class="footer-right">
-					<el-tooltip effect="dark" content="全屏" placement="bottom">
+					<el-tooltip effect="dark" :content="$t('FullScreen')" placement="bottom">
 						<div @click="triggerChangeFullScreen" class="footer-item footer-button">
 							<i class="el-icon-full-screen"></i>
 						</div>
 					</el-tooltip>
-					<el-tooltip v-if="false" effect="dark" content="缩小" placement="bottom">
+					<el-tooltip v-if="false" effect="dark" :content="$t('ZoomOut')" placement="bottom">
 						<div @click="triggerChangeScale((scale - 0.05) >= 0.02 ? (scale - 0.05) : 0.02)"
 							class="footer-item footer-button">
 							<i class="el-icon-minus"></i>
@@ -125,13 +144,13 @@
 							:show-tooltip="false">
 						</el-slider>
 					</div>
-					<el-tooltip v-if="false" effect="dark" content="放大" placement="bottom">
+					<el-tooltip v-if="false" effect="dark" :content="$t('ZoomIn')" placement="bottom">
 						<div @click="triggerChangeScale((scale + 0.05) <= 10 ? (scale + 0.05) : 10)"
 							class="footer-item footer-button">
 							<i class="el-icon-plus"></i>
 						</div>
 					</el-tooltip>
-					<el-tooltip v-if="false" effect="dark" content="重置缩放" placement="bottom">
+					<el-tooltip v-if="false" effect="dark" :content="$t('ResetZoom')" placement="bottom">
 						<div @click="triggerChangeScale(1)" class="footer-item" style="width:30px;">
 							{{ (scale * 100).toFixed(0) }}%
 						</div>
@@ -144,23 +163,48 @@
 			</div>
 		</div>
 		<!-- 添加节点对话框 -->
-		<el-dialog title="查找节点" :visible="isShowSearchNodeDialog" width="30%" @close="isShowSearchNodeDialog = false"
-			center>
-			<el-input placeholder="输入关键字进行过滤" v-model="searchNodeFilterText">
+		<el-dialog :title="$t('FindNode')" :visible="isShowSearchNodeDialog" width="60%"
+			@close="isShowSearchNodeDialog = false" center>
+			<el-input :placeholder="$t('EnterAKeywordToSearch')" v-model="searchNodeFilterText">
 			</el-input>
-			<div style="margin-top: 25px;height: 350px;overflow-y: scroll;">
-				<el-tree class="filter-tree" :data="searchNodeData" :props="searchNodeDefaultProps"
-					:default-expand-all="false" :filter-node-method="triggerSearchNodeFilterNode"
-					@node-click="triggerSearchNodeClickNode" ref="searchNodeTree">
-				</el-tree>
-			</div>
+			<el-row :gutter="0">
+				<el-col :span="12">
+					<div
+						style="border-right: 1px solid lightgrey;padding:0 20px;margin-top: 25px;height: 350px;overflow-y: scroll;">
+						<el-tree :data="searchNodeData" :props="searchNodeDefaultProps" :default-expand-all="false"
+							:filter-node-method="triggerSearchNodeFilterNode" :expand-on-click-node="true" accordion
+							@node-click="triggerSearchNodeClickNode" @node-contextmenu="triggerSearchNodeRightClickNode"
+							ref="searchNodeTree">
+						</el-tree>
+					</div>
+				</el-col>
+				<el-col :span="12" v-loading="searchNodeSelectNodeDocLoading">
+					<div
+						style="border-left: 1px solid lightgrey;padding:0 20px;margin-top: 25px;height: 350px;overflow-y: scroll;">
+						<div v-if="!searchNodeSelectNode || !searchNodeSelectNodeDoc">
+							<el-empty
+								:description="!searchNodeSelectNode ? $t('PleaseSelectNode') : $t('NoNode') + '「' + searchNodeSelectNode.name + '」' + $t('sIntro')">
+							</el-empty>
+						</div>
+						<div v-if="searchNodeSelectNode && searchNodeSelectNodeDoc">
+							<vue-markdown :source="searchNodeSelectNodeDoc" :breaks="true" :typographer="true"
+								:linkify="true" :highlight="true"></vue-markdown>
+						</div>
+					</div>
+				</el-col>
+			</el-row>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="isShowSearchNodeDialog = false">{{ $t('Cancel') }}</el-button>
+				<el-button :disabled="!searchNodeSelectNode" type="primary"
+					@click="triggerSearchNodeRightClickNode(null, searchNodeSelectNode)">{{ $t('Confirm') }}</el-button>
+			</span>
 		</el-dialog>
 		<!-- 修改节点属性抽屉 -->
-		<el-drawer title="编辑属性" :visible="isShowEditNodeAttrDrawer" direction="rtl" @close="triggerCloseEditNodeAttrDrawer"
-			size="20%">
+		<el-drawer :title="$t('EditProperties')" :visible="isShowEditNodeAttrDrawer" direction="rtl"
+			@close="triggerCloseEditNodeAttrDrawer" size="20%">
 			<div class="attribute-box">
 				<div v-if="editNodeAttrData" class="attribute-item">
-					<div class="attribute-title">输入</div>
+					<div class="attribute-title">{{ $t('Input') }}</div>
 					<div v-for="item, index in editNodeAttrData.input_type" :key="index">
 						<div v-if="item == 'def_bool'" class="attribute-key-value">
 							<div>
@@ -194,7 +238,8 @@
 								<div>{{ editNodeAttrData.input_intro[index] }}</div>
 							</div>
 							<div style="width: 150px;">
-								<el-input v-model="editNodeAttrData.input[index]" placeholder="请输入字符串"></el-input>
+								<el-input v-model="editNodeAttrData.input[index]"
+									:placeholder="$t('PleaseEnterAString')"></el-input>
 							</div>
 						</div>
 					</div>
@@ -210,6 +255,7 @@
 import Event from "./../../utils/event.js"
 import * as FileUtils from "./../../utils/file.js"
 import * as PFGraph from "./ProgramFlowGraph.js"
+import * as Api from '@/api'
 
 export default {
 	// eslint-disable-next-line vue/multi-word-component-names
@@ -246,6 +292,9 @@ export default {
 			canvasHeight: 500,
 			// 查找节点对话框
 			isShowSearchNodeDialog: false,
+			searchNodeSelectNode: null,
+			searchNodeSelectNodeDoc: null,
+			searchNodeSelectNodeDocLoading: false,
 			searchNodeFilterText: '',
 			searchNodeDefaultProps: { label: 'name', children: 'nodeList' },
 			searchNodeData: [{
@@ -259,165 +308,11 @@ export default {
 			}, {
 				type: 'ctrl',
 				name: '程序控制节点',
-				nodeList: [{
-					"id": "",
-					"name": "For循环执行",
-					"node_name": "ctrl-for",
-					"node_type": "ctrl",
-					"pre_edge_id": [],
-					"nxt_edge_id": [""],
-					"nxt_edge_id_intro": ["下一步: 执行"],
-					"input": {
-						"start_index": 0,
-						"end_index": 5,
-						"step": 1
-					},
-					"input_type": {
-						"start_index": "number",
-						"end_index": "number",
-						"step": "number"
-					},
-					"input_intro": {
-						"start_index": "开头: 数值",
-						"end_index": "结尾: 数值",
-						"step": "递进: 数值"
-					},
-					"output": {
-						"index": 0,
-						"loop_edge_id": ""
-					},
-					"output_type": {
-						"index": "number",
-						"loop_edge_id": "nxt_edge_id"
-					},
-					"output_intro": {
-						"index": "索引: 数值",
-						"loop_edge_id": "循环主体: 执行"
-					}
-				}, {
-					"id": "",
-					"name": "If条件执行",
-					"node_name": "ctrl-if",
-					"node_type": "ctrl",
-					"pre_edge_id": [],
-					"nxt_edge_id": ["", ""],
-					"nxt_edge_id_intro": ["True: 执行", "False: 执行"],
-					"input": {
-						"bool": false
-					},
-					"input_type": {
-						"bool": "bool"
-					},
-					"input_intro": {
-						"bool": "条件: 布尔"
-					},
-					"output": {},
-					"output_type": {}
-				}, {
-					"id": "",
-					"name": "执行队列",
-					"node_name": "ctrl-queue",
-					"node_type": "ctrl",
-					"pre_edge_id": [],
-					"nxt_edge_id": [
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						""
-					],
-					"nxt_edge_id_intro": [
-						"下一步0: 执行",
-						"下一步1: 执行",
-						"下一步2: 执行",
-						"下一步3: 执行",
-						"下一步4: 执行",
-						"下一步5: 执行",
-						"下一步6: 执行",
-						"下一步7: 执行",
-						"下一步8: 执行",
-						"下一步9: 执行"
-					],
-					"input": {},
-					"input_type": {},
-					"output": {},
-					"output_type": {}
-				}, {
-					"id": "",
-					"name": "选择执行",
-					"node_name": "ctrl-select",
-					"node_type": "ctrl",
-					"pre_edge_id": [],
-					"nxt_edge_id": [
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						"",
-						""
-					],
-					"nxt_edge_id_intro": [
-						"0: 执行",
-						"1: 执行",
-						"2: 执行",
-						"3: 执行",
-						"4: 执行",
-						"5: 执行",
-						"6: 执行",
-						"7: 执行",
-						"8: 执行",
-						"9: 执行"
-					],
-					"input": {
-						"index": 0
-					},
-					"input_type": {
-						"index": "number"
-					},
-					"input_intro": {
-						"index": "选择索引: 数值"
-					},
-					"output": {},
-					"output_type": {}
-				}],
+				nodeList: [],
 			}, {
 				type: 'func',
 				name: '程序功能节点',
-				nodeList: [{
-					"id": "",
-					"name": "测试",
-					"node_name": "func-test-1692798936169238-bc2b8ee241bc11ee8331dcf505272cb8-0_0_1",
-					"node_type": "func",
-					"pre_edge_id": [],
-					"nxt_edge_id": [],
-					"input": {
-						"value": ""
-					},
-					"input_type": {
-						"value": "string"
-					},
-					"input_intro": {
-						"value": "测试值: 字符串"
-					},
-					"output": {
-						"value": ""
-					},
-					"output_type": {
-						"value": "string"
-					},
-					"output_intro": {
-						"value": "测试值: 字符串"
-					}
-				}],
+				nodeList: [],
 			}],
 			// 编辑节点属性抽屉
 			isShowEditNodeAttrDrawer: false,
@@ -463,20 +358,7 @@ export default {
 		};
 	},
 	created() {
-		// 加载配置
-		this.searchNodeData=[{"type": "dtio", "name": "输入输出节点", "nodeList": [{"id": "", "name": "布尔", "node_name": "dtio-i-bool", "node_type": "dtio", "pre_edge_id": [], "nxt_edge_id": [], "input": {"value": false}, "input_type": {"value": "def_bool"}, "input_intro": {"value": "布尔定义"}, "output": {"value": false}, "output_type": {"value": "bool"}, "output_intro": {"value": "Value: 布尔"}}, {"id": "", "name": "浮点数值", "node_name": "dtio-i-float", "node_type": "dtio", "pre_edge_id": [], "nxt_edge_id": [], "input": {"value": 0.0}, "input_type": {"value": "def_float"}, "input_intro": {"value": "浮点数值定义"}, "output": {"value": 0.0}, "output_type": {"value": "number"}, "output_intro": {"value": "Value: 浮点数值"}}, {"id": "", "name": "整型数值", "node_name": "dtio-i-int", "node_type": "dtio", "pre_edge_id": [], "nxt_edge_id": [], "input": {"value": 0}, "input_type": {"value": "def_int"}, "input_intro": {"value": "整数数值定义"}, "output": {"value": 0}, "output_type": {"value": "number"}, "output_intro": {"value": "Value: 整数数值"}}, {"id": "", "name": "字符串", "node_name": "dtio-i-string", "node_type": "dtio", "pre_edge_id": [], "nxt_edge_id": [], "input": {"value": ""}, "input_type": {"value": "def_string"}, "input_intro": {"value": "字符串定义"}, "output": {"value": ""}, "output_type": {"value": "string"}, "output_intro": {"value": "Value: 字符串"}}]}, {"type": "dtpc", "name": "数据处理节点", "nodeList": [{"id": "", "name": "绝对值", "node_name": "dtpc-abs", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number": 0}, "input_type": {"number": "number"}, "input_intro": {"number": "A: 数值"}, "output": {"result": 0}, "output_type": {"result": "number"}, "output_intro": {"result": "Result: 数值"}}, {"id": "", "name": "加法", "node_name": "dtpc-add", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 0}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "加数: 数值", "number_2": "被加数: 数值"}, "output": {"result": 0}, "output_type": {"result": "number"}, "output_intro": {"result": "和: 数值"}}, {"id": "", "name": "逻辑与", "node_name": "dtpc-and", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"bool_1": false, "bool_2": false}, "input_type": {"bool_1": "bool", "bool_2": "bool"}, "input_intro": {"bool_1": "A: 布尔", "bool_2": "B: 布尔"}, "output": {"result": false}, "output_type": {"result": "bool"}, "output_intro": {"result": "Result: 布尔"}}, {"id": "", "name": "布尔转字符串", "node_name": "dtpc-bool2string", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"bool": false}, "input_type": {"bool": "bool"}, "input_intro": {"bool": "布尔"}, "output": {"result": "False"}, "output_type": {"result": "string"}, "output_intro": {"result": "Result: 字符串"}}, {"id": "", "name": "除法", "node_name": "dtpc-divide", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 1}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "被除数: 数值", "number_2": "被数: 数值"}, "output": {"result": 0}, "output_type": {"result": "number"}, "output_intro": {"result": "商: 数值"}}, {"id": "", "name": "数值比较==", "node_name": "dtpc-eq_number", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 0}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "A: 数值", "number_2": "B: 数值"}, "output": {"result": true}, "output_type": {"result": "bool"}, "output_intro": {"result": "A==B: 布尔"}}, {"id": "", "name": "字符串比较==", "node_name": "dtpc-eq_string", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"string_1": "", "string_2": ""}, "input_type": {"string_1": "string", "string_2": "string"}, "input_intro": {"string_1": "A: 字符串", "string_2": "B: 字符串"}, "output": {"result": true}, "output_type": {"result": "bool"}, "output_intro": {"result": "A==B: 布尔"}}, {"id": "", "name": "数值比较>=", "node_name": "dtpc-ge", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 0}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "A: 数值", "number_2": "B: 数值"}, "output": {"result": true}, "output_type": {"result": "bool"}, "output_intro": {"result": "A>=B: 布尔"}}, {"id": "", "name": "数值比较>", "node_name": "dtpc-gt", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 0}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "A: 数值", "number_2": "B: 数值"}, "output": {"result": true}, "output_type": {"result": "bool"}, "output_intro": {"result": "A>B: 布尔"}}, {"id": "", "name": "数值比较<=", "node_name": "dtpc-le", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 0}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "A: 数值", "number_2": "B: 数值"}, "output": {"result": true}, "output_type": {"result": "bool"}, "output_intro": {"result": "A<=B: 布尔"}}, {"id": "", "name": "逻辑选择布尔", "node_name": "dtpc-logical_select_bool", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"bool": false, "bool_1": true, "bool_2": false}, "input_type": {"bool": "bool", "bool_1": "bool", "bool_2": "bool"}, "input_intro": {"bool": "A: 布尔", "bool_1": "B1: 布尔", "bool_2": "B2: 布尔"}, "output": {"result": false}, "output_type": {"result": "bool"}, "output_intro": {"result": "B1/B2: 布尔"}}, {"id": "", "name": "逻辑选择数值", "node_name": "dtpc-logical_select_number", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"bool": false, "number_1": 0, "number_2": 0}, "input_type": {"bool": "bool", "number_1": "number", "number_2": "number"}, "input_intro": {"bool": "A: 布尔", "number_1": "B1: 数值", "number_2": "B2: 数值"}, "output": {"result": 0}, "output_type": {"result": "number"}, "output_intro": {"result": "B1/B2: 数值"}}, {"id": "", "name": "逻辑选择字符串", "node_name": "dtpc-logical_select_string", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"bool": false, "string_1": "", "string_2": ""}, "input_type": {"bool": "bool", "string_1": "string", "string_2": "string"}, "input_intro": {"bool": "A: 布尔", "string_1": "B1: 字符串", "string_2": "B2: 字符串"}, "output": {"result": ""}, "output_type": {"result": "string"}, "output_intro": {"result": "B1/B2: 字符串"}}, {"id": "", "name": "数值比较<", "node_name": "dtpc-lt", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 0}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "A: 数值", "number_2": "B: 数值"}, "output": {"result": false}, "output_type": {"result": "bool"}, "output_intro": {"result": "A<B: 布尔"}}, {"id": "", "name": "取余", "node_name": "dtpc-mod", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 1}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "被除数: 数值", "number_2": "除数: 数值"}, "output": {"result": 0}, "output_type": {"result": "number"}, "output_intro": {"result": "余数: 数值"}}, {"id": "", "name": "乘法", "node_name": "dtpc-multiply", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 0}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "被乘数: 数值", "number_2": "乘数: 数值"}, "output": {"result": 0}, "output_type": {"result": "number"}, "output_intro": {"result": "积: 数值"}}, {"id": "", "name": "逻辑非", "node_name": "dtpc-not", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"bool": false}, "input_type": {"bool": "bool"}, "input_intro": {"bool": "A: 布尔"}, "output": {"result": true}, "output_type": {"result": "bool"}, "output_intro": {"result": "!A: 布尔"}}, {"id": "", "name": "数值转字符串", "node_name": "dtpc-number2string", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number": 0}, "input_type": {"number": "number"}, "input_intro": {"number": "数值"}, "output": {"result": "0"}, "output_type": {"result": "string"}, "output_intro": {"result": "Result: 字符串"}}, {"id": "", "name": "逻辑或", "node_name": "dtpc-or", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"bool_1": false, "bool_2": false}, "input_type": {"bool_1": "bool", "bool_2": "bool"}, "input_intro": {"bool_1": "A: 布尔", "bool_2": "B: 布尔"}, "output": {"result": false}, "output_type": {"result": "bool"}, "output_intro": {"result": "A&B: 布尔"}}, {"id": "", "name": "减法", "node_name": "dtpc-subtract", "node_type": "dtpc", "pre_edge_id": [], "nxt_edge_id": [], "input": {"number_1": 0, "number_2": 0}, "input_type": {"number_1": "number", "number_2": "number"}, "input_intro": {"number_1": "被减数: 数值", "number_2": "减数: 数值"}, "output": {"result": 0}, "output_type": {"result": "number"}, "output_intro": {"result": "差: 数值"}}]}, {"type": "ctrl", "name": "程序控制节点", "nodeList": [{"id": "", "name": "For循环执行", "node_name": "ctrl-for", "node_type": "ctrl", "pre_edge_id": [], "nxt_edge_id": [""], "nxt_edge_id_intro": ["下一步: 执行"], "input": {"start_index": 0, "end_index": 5, "step": 1}, "input_type": {"start_index": "number", "end_index": "number", "step": "number"}, "input_intro": {"start_index": "开头: 数值", "end_index": "结尾: 数值", "step": "递进: 数值"}, "output": {"index": 0, "loop_edge_id": ""}, "output_type": {"index": "number", "loop_edge_id": "nxt_edge_id"}, "output_intro": {"index": "索引: 数值", "loop_edge_id": "循环主体: 执行"}}, {"id": "", "name": "If条件执行", "node_name": "ctrl-if", "node_type": "ctrl", "pre_edge_id": [], "nxt_edge_id": ["", ""], "nxt_edge_id_intro": ["True: 执行", "False: 执行"], "input": {"bool": false}, "input_type": {"bool": "bool"}, "input_intro": {"bool": "条件: 布尔"}, "output": {}, "output_type": {}}, {"id": "", "name": "执行队列", "node_name": "ctrl-queue", "node_type": "ctrl", "pre_edge_id": [], "nxt_edge_id": ["", "", "", "", "", "", "", "", "", ""], "nxt_edge_id_intro": ["下一步0: 执行", "下一步1: 执行", "下一步2: 执行", "下一步3: 执行", "下一步4: 执行", "下一步5: 执行", "下一步6: 执行", "下一步7: 执行", "下一步8: 执行", "下一步9: 执行"], "input": {}, "input_type": {}, "output": {}, "output_type": {}}, {"id": "", "name": "选择执行", "node_name": "ctrl-select", "node_type": "ctrl", "pre_edge_id": [], "nxt_edge_id": ["", "", "", "", "", "", "", "", "", ""], "nxt_edge_id_intro": ["0: 执行", "1: 执行", "2: 执行", "3: 执行", "4: 执行", "5: 执行", "6: 执行", "7: 执行", "8: 执行", "9: 执行"], "input": {"index": 0}, "input_type": {"index": "number"}, "input_intro": {"index": "选择索引: 数值"}, "output": {}, "output_type": {}}]}, {"type": "func", "name": "程序功能节点", "nodeList": [{"id": "", "name": "测试", "node_name": "func-test-1692798936169238-bc2b8ee241bc11ee8331dcf505272cb8-0_0_1", "node_type": "func", "pre_edge_id": [], "nxt_edge_id": [], "input": {"value": ""}, "input_type": {"value": "string"}, "input_intro": {"value": "测试值: 字符串"}, "output": {"value": ""}, "output_type": {"value": "string"}, "output_intro": {"value": "测试值: 字符串"}}]}, {"type": "evrx", "name": "事件发生节点", "nodeList": [{"id": "", "name": "开始", "node_name": "evrx-start", "node_type": "evrx", "pre_edge_id": [], "nxt_edge_id": [""], "nxt_edge_id_intro": ["下一步: 执行"], "input": {}, "input_type": {}, "input_intro": {}, "output": {}, "output_type": {}, "output_intro": {}}]}, {"type": "evtx", "name": "事件触发节点", "nodeList": [{"id": "", "name": "结束", "node_name": "evtx-end", "node_type": "evtx", "pre_edge_id": [], "nxt_edge_id": [], "input": {}, "input_type": {}, "input_intro": {}, "output": {}, "output_type": {}, "output_intro": {}}]}]
-		this.$axios.get('https://raw.githubusercontent.com/Xuanfq/AutoRunX-Python/master/cli/doc/nodeData.json')
-			.then((res)=>{
-				// console.log(res)
-				let data=JSON.parse(JSON.stringify(res.data))
-				this.searchNodeData=data
-			})
-			.catch((err)=>{
-				this.$message({
-					type:'error',
-					message:err
-				})
-			})
+		this.refresh()
 		// 初始化
 		this.triggerScrollToCenter();
 	},
@@ -496,7 +378,7 @@ export default {
 		this.graph = PFGraph.initGraph("design", window.innerWidth, window.innerHeight, "design-minimap", this.graphInitData)
 
 		Event.on("rqAddNode", this, () => {
-			this.isShowSearchNodeDialog = true
+			this.triggerOpenSearchNodeDialog()
 		})
 		Event.on("rqEditNodeAttr", this, (data) => {
 			// console.log("编辑", data)
@@ -508,7 +390,7 @@ export default {
 		})
 	},
 	methods: {
-		// =============================================== 文件 ==================================================
+		// =============================================== file ==================================================
 		fileOperate(command) {
 			if (command === "cmdExportImage") {
 				this.graph.downloadFullImage(this.projectName, 'image/png', {
@@ -521,7 +403,7 @@ export default {
 					const config = JSON.parse(data)
 					PFGraph.loadConfig(config)
 					this.$message({
-						message: '加载成功',
+						message: this.$i18n.t('LoadSuccess'),
 						type: 'success'
 					})
 				})
@@ -530,7 +412,7 @@ export default {
 				// console.log("saved", config)
 				FileUtils.downloadFile(this.projectName + ".json", JSON.stringify(config))
 				this.$message({
-					message: '保存成功',
+					message: this.$i18n.t('SaveSuccess'),
 					type: 'success'
 				})
 			} else if (command === "cmdOpenProject") {
@@ -538,24 +420,46 @@ export default {
 					const config = JSON.parse(data)
 					PFGraph.loadConfig(config)
 					this.$message({
-						message: '加载成功',
+						message: this.$i18n.t('LoadSuccess'),
 						type: 'success'
 					})
 				})
 			} else if (command === "cmdSaveProject") {
 				const config = PFGraph.saveConfig()
 				FileUtils.downloadFile(this.projectName + '.arxc', JSON.stringify(config))
+				this.$message({
+					message: this.$i18n.t('SaveSuccess'),
+					type: 'success'
+				})
 			}
 		},
-		// =============================================== 配置 ==================================================
-		// =============================================== 状态更新 ==================================================
-		// =============================================== 查找节点 ==================================================
+		// =============================================== language ==================================================
+		changeLang(lang) {
+			// console.log(this.$gfunc)
+			this.$gfunc.changeLang(lang)
+			this.refresh()
+		},
+		// =============================================== refresh ==================================================
+		refresh() {
+			// 加载配置
+			Api.node.getBaseNodeData((res) => {
+				if (res.flag) {
+					this.searchNodeData = res.data
+				} else {
+					this.$message({
+						type: 'error',
+						message: res.data
+					})
+				}
+			}, this)
+		},
+		// =============================================== find node ==================================================
 		triggerSearchNodeFilterNode(value, data) {
 			if (!value) return true;
-			return data.name.indexOf(value) !== -1;
+			return data.name.indexOf(value) !== -1 || (data.node_type && data.node_type.indexOf(value) !== -1);
 		},
-		triggerSearchNodeClickNode(data, node, vueobj) {
-			if (node.isLeaf && !data.nodeList) {
+		triggerSearchNodeRightClickNode(e, data, node) {
+			if (!data.nodeList) {
 				// console.log(data)
 				data = JSON.parse(JSON.stringify(data))
 				data.id = `node-${data.node_name}-${Date.now()}-${(Math.random() * 1000000 + "").substring(0, 4)}`
@@ -564,12 +468,36 @@ export default {
 				this.isShowSearchNodeDialog = false
 			}
 		},
+		triggerSearchNodeClickNode(data, node, vueobj) {
+			if (!data.nodeList) {
+				// console.log(data)
+				data = JSON.parse(JSON.stringify(data))
+				this.searchNodeSelectNode = data
+				this.searchNodeSelectNodeDocLoading = true
+				Api.node.getNodeDoc((res) => {
+					// console.log("doc",res)
+					if (res.flag) {
+						this.searchNodeSelectNodeDoc = res.data
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.data
+						})
+					}
+					this.searchNodeSelectNodeDocLoading = false
+				}, this, data)
+			}
+		},
+		triggerOpenSearchNodeDialog() {
+			this.searchNodeSelectNode = null
+			this.searchNodeSelectNodeDoc = null
+			this.isShowSearchNodeDialog = true
+		},
 		triggerCloseEditNodeAttrDrawer() {
 			Event.emit("editNodeAttr", this.editNodeAttrData)
 			this.isShowEditNodeAttrDrawer = false
 		},
-		// =============================================== 布局 ==================================================
-		// =============================================== 视图 ==================================================
+		// =============================================== view ==================================================
 		triggerChangeFullScreen() {
 			if (!document.fullscreenElement) {
 				document.querySelector("html").requestFullscreen();
@@ -589,7 +517,7 @@ export default {
 				isGraphFit && this.graph.fitCenter()
 			});
 		},
-		// =============================================== 开关 ==================================================
+		// =============================================== switch ==================================================
 		triggerChangeIsHeaderFold() {
 			this.isTopFold = !this.isTopFold;
 			setTimeout(() => {

@@ -4,13 +4,14 @@ import router from './router/router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/icon/iconfont.css"
-import locale from 'element-ui/lib/locale/lang/zh-CN'
+import i18n from '@/lang'
+import store from '@/store'
 import './plugins/element.js'
 import './registerServiceWorker'
 import axios from 'axios'
+import VueMarkdown from 'vue-markdown';
 
-Vue.use(ElementUI, { locale })
-
+Vue.component('VueMarkdown', VueMarkdown)
 
 Vue.config.productionTip = false
 
@@ -21,7 +22,20 @@ router.beforeEach((to, from, next) => {
   next();
 })
 
+// global functions
+const gfunc = {
+  changeLang: (lang) => {
+    i18n.locale = lang
+    store.commit('lang', lang)
+  }
+}
+
+Vue.prototype.$gfunc=gfunc
+
 new Vue({
+  ElementUI,
   router,
+  i18n,
+  store,
   render: h => h(App),
 }).$mount('#app')

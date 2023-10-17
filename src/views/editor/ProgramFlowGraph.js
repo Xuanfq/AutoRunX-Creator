@@ -380,7 +380,7 @@ G6.registerBehavior('custom-operate', {
 			} else if (anchorPointClass === "output") {
 				anchorPointType = model.output_type[shapeName.split("-")[1]]
 			}
-			console.log(anchorPointClass, anchorPointType, FUNC_GET_EDGE_ANCHORPOINT_INDEX(model, shapeName))
+			// console.log(anchorPointClass, anchorPointType, FUNC_GET_EDGE_ANCHORPOINT_INDEX(model, shapeName))
 			let anchorPointIndex = FUNC_GET_EDGE_ANCHORPOINT_INDEX(model, shapeName)
 			let addNewEdge = false
 			if (anchorPointClass === 'output' || anchorPointClass === 'nxt_edge_id' || anchorPointClass === 'pre_edge_id') {

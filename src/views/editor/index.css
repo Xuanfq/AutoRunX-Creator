@@ -57,6 +57,17 @@ div {
   align-items: center;
 }
 
+.header-right .header-item{
+  margin-right: 16px;
+}
+
+.header-right .header-item >:hover,
+.header-left .header-item >:hover,
+i:hover{
+  color: rgb(127,55,183);
+}
+
+
 .header-left .header-item:hover,
 .header-center .header-item:hover,
 .header-right .header-item:hover{
