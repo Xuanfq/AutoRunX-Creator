@@ -30,7 +30,11 @@ const refresh = () => {
 
 const refreshLang = () => {
     if (store && store.getters.lang) {
-        defaultLang = store.getters.lang
+        let lang = store.getters.lang
+        if (lang != 'zh') {
+            lang = 'en'
+        }
+        defaultLang = lang
     }
     return defaultLang
 }
@@ -39,7 +43,31 @@ const refreshLang = () => {
 
 refresh()
 
-
+export const getNodeConfig = (callback, self, node, lang) => {
+    if (!lang) lang = refreshLang()
+    axios.get(baseNodeConfigUrl.replace("${lang}", lang).replace("${nodeId}", node.node_name))
+        // search from base node
+        .then((res) => {
+            // console.log(res)
+            let data = { flag: true, data: res.data }
+            callback.call(self, data)
+        })
+        .catch((err) => {
+            // console.err(err)
+            axios.get(marketNodeConfigUrl.replace("${lang}", lang).replace("${nodeId}", node.node_name))
+                // search from market node
+                .then((res) => {
+                    // console.log(res)
+                    let data = { flag: true, data: res.data }
+                    callback.call(self, data)
+                })
+                .catch((err) => {
+                    // console.err(err)
+                    let data = { flag: true, data: err }
+                    callback.call(self, data)
+                })
+        })
+}
 
 export const getNodeDoc = (callback, self, node, lang) => {
     if (!lang) lang = refreshLang()

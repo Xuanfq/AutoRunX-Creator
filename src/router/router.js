@@ -21,30 +21,29 @@ Vue.use(Router)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
   }
  */
-import editor from '../views/editor/index.vue'
 
 const routes = [{
     name: 'index',
     path: '/',
-    component: editor,
+    component: () => import('@/views/home/index'),
     meta: {
         title: 'AutoRunX Editor',
         keepAlive: true, // 需要被缓存
     }
 }, {
-    name: 'editor',
-    path: '/editor',
-    component: editor,
+    name: 'home',
+    path: '/home',
+    component: () => import('@/views/home/index'),
     meta: {
-        title: 'AutoRunX Editor',
+        title: 'AutoRunX',
         keepAlive: true, // 需要被缓存
     }
 }, {
-    name: 'creator',
-    path: '/creator',
-    component: editor,
+    name: 'creater',
+    path: '/creater',
+    component: () => import('@/views/home/index'),
     meta: {
-        title: 'AutoRunX Editor',
+        title: 'AutoRunX',
         keepAlive: true, // 需要被缓存
     }
 }]
